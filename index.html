@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Forex Knowledge Test</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f5f7;
+  color: #1f2937;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+/* START SCREEN */
+#startScreen {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.start-card {
+  width: 100%;
+  max-width: 600px;
+  background: white;
+  padding: 40px;
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+.logo {
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+  color: #555;
+}
+
+h1 {
+  margin: 0 0 12px;
+  font-size: 32px;
+}
+
+.subtitle {
+  color: #666;
+  line-height: 1.6;
+}
+
+.rules {
+  background: #f6f7f9;
+  padding: 18px;
+  border-radius: 12px;
+  margin: 25px 0;
+  line-height: 1.7;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 14px;
+  border: 1px solid #d5d9df;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+button {
+  border: none;
+  border-radius: 8px;
+  padding: 13px 20px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#startBtn {
+  width: 100%;
+  background: #111827;
+  color: white;
+  margin-top: 5px;
+}
+
+#startBtn:hover {
+  background: #000;
+}
+
+.error {
+  color: #d93025;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+/* TEST SCREEN */
+#testScreen {
+  display: none;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.test-container {
+  max-width: 800px;
+  margin: auto;
+}
+
+.test-header {
+  background: white;
+  padding: 18px 20px;
+  border-radius: 14px;
+  margin-bottom: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#questionCounter {
+  font-weight: bold;
+}
+
+#timer {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+#timer.warning {
+  color: #d93025;
+}
+
+.progress-container {
+  width: 100%;
+  height: 8px;
+  background: #ddd;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+#progressBar {
+  height: 100%;
+  width: 0%;
+  background: #111827;
+  transition: width 0.3s;
+}
+
+.question-card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+}
+
+#questionNumber {
+  color: #777;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+#questionText {
+  font-size: 21px;
+  line-height: 1.5;
+  margin-bottom: 25px;
+}
+
+.option {
+  width: 100%;
+  text-align: left;
+  background: #f7f8fa;
+  border: 2px solid transparent;
+  margin-bottom: 12px;
+  padding: 16px;
+  border-radius: 10px;
+  font-weight: normal;
+}
+
+.option:hover {
+  border-color: #aaa;
+}
+
+.option.selected {
+  border-color: #111827;
+  background: #eef0f3;
+}
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+}
+
+#previousBtn {
+  background: #e5e7eb;
+}
+
+#nextBtn {
+  background: #111827;
+  color: white;
+}
+
+/* RESULT */
+#resultScreen {
+  display: none;
+  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.result-card {
+  width: 100%;
+  max-width: 550px;
+  background: white;
+  padding: 40px;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+.score-box {
+  background: #f5f6f8;
+  padding: 25px;
+  border-radius: 14px;
+  margin: 25px 0;
+}
+
+#scoreDisplay {
+  font-size: 48px;
+  font-weight: bold;
+}
+
+#percentDisplay {
+  font-size: 20px;
+  color: #666;
+  margin-top: 5px;
+}
+
+.result-info {
+  text-align: left;
+  line-height: 1.8;
+}
+
+@media (max-width: 600px) {
+  .start-card,
+  .question-card,
+  .result-card {
+    padding: 25px;
+  }
+
+  h1 {
+    font-size: 27px;
+  }
+
+  #questionText {
+    font-size: 18px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+  <!-- START SCREEN -->
+  <section id="startScreen">
+    <div class="start-card">
+
+      <div class="logo">FOREX CBT</div>
+
+      <h1>Forex Knowledge Test</h1>
+
+      <p class="subtitle">
+        Test your understanding of forex concepts, technical analysis,
+        market structure, liquidity and risk management.
+      </p>
+
+      <div class="rules">
+        <strong>Test Rules</strong>
+        <br>
+        • 20 questions<br>
+        • 10 minutes<br>
+        • Choose one answer for each question<br>
+        • Questions are randomized<br>
+        • One attempt per Participant ID
+      </div>
+
+      <input
+        type="text"
+        id="nameInput"
+        placeholder="Enter your name"
+        autocomplete="off"
+      >
+
+      <input
+        type="text"
+        id="idInput"
+        placeholder="Enter your Participant ID"
+        autocomplete="off"
+      >
+
+      <div id="startError" class="error"></div>
+
+      <button id="startBtn">Start Test</button>
+
+    </div>
+  </section>
+
+
+  <!-- TEST SCREEN -->
+  <section id="testScreen">
+
+    <div class="test-container">
+
+      <div class="test-header">
+        <div id="questionCounter">
+          Question 1 of 20
+        </div>
+
+        <div id="timer">
+          10:00
+        </div>
+      </div>
+
+      <div class="progress-container">
+        <div id="progressBar"></div>
+      </div>
+
+      <div class="question-card">
+
+        <div id="questionNumber">
+          Question 1
+        </div>
+
+        <div id="questionText"></div>
+
+        <div id="optionsContainer"></div>
+
+        <div class="navigation">
+
+          <button id="previousBtn">
+            Previous
+          </button>
+
+          <button id="nextBtn">
+            Next
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- RESULT SCREEN -->
+  <section id="resultScreen">
+
+    <div class="result-card">
+
+      <h1>Test Completed</h1>
+
+      <div class="score-box">
+
+        <div id="scoreDisplay">
+          0/20
+        </div>
+
+        <div id="percentDisplay">
+          0%
+        </div>
+
+      </div>
+
+      <div class="result-info">
+
+        <p>
+          <strong>Name:</strong>
+          <span id="resultName"></span>
+        </p>
+
+        <p>
+          <strong>Participant ID:</strong>
+          <span id="resultId"></span>
+        </p>
+
+        <p>
+          <strong>Time Used:</strong>
+          <span id="resultTime"></span>
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+
+<script>
+
+/* ============================
+   GOOGLE SHEETS CONNECTION
+============================ */
+
+const SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbxrSkJ5_2XoQlbyiwIvoRYht9mdCM6Z5P1GEJkGEgwazRLBlNMnDuaiUPoS7MC-lG59/exec";
+
+
+/* ============================
+   TEST SETTINGS
+============================ */
+
+const TOTAL_QUESTIONS = 20;
+
+const TEST_DURATION = 600;
+
+
+/* ============================
+   QUESTION BANK
+============================ */
+
+const questionBank = [
+
+{
+question: "In the EUR/USD currency pair, which currency is the base currency?",
+options: [
+"EUR",
+"USD",
+"Both currencies are base currencies",
+"The currency with the larger economy"
+],
+correct: "EUR"
+},
+
+{
+question: "GBP/USD moves from 1.2700 to 1.2710. What has happened?",
+options: [
+"GBP strengthened relative to USD",
+"USD strengthened relative to GBP",
+"The spread increased by 10 pips",
+"The pair fell by 10 pips"
+],
+correct: "GBP strengthened relative to USD"
+},
+
+{
+question: "What does the spread in forex represent?",
+options: [
+"The difference between the bid and ask price",
+"The amount of leverage on an account",
+"The distance between support and resistance",
+"The broker's maximum trade size"
+],
+correct: "The difference between the bid and ask price"
+},
+
+{
+question: "A standard forex lot is generally equal to:",
+options: [
+"100,000 units",
+"10,000 units",
+"1,000 units",
+"1,000,000 units"
+],
+correct: "100,000 units"
+},
+
+{
+question: "What is margin primarily used for in leveraged trading?",
+options: [
+"It is the amount set aside to open and maintain a leveraged position",
+"It guarantees that a trade will be profitable",
+"It removes the spread from a trade",
+"It determines the direction of the market"
+],
+correct: "It is the amount set aside to open and maintain a leveraged position"
+},
+
+{
+question: "What is the main purpose of a stop-loss order?",
+options: [
+"To automatically limit potential loss if price moves against the position",
+"To guarantee a profitable exit",
+"To increase leverage",
+"To eliminate market volatility"
+],
+correct: "To automatically limit potential loss if price moves against the position"
+},
+
+{
+question: "A trader expects price to pull back before moving higher. Which order is designed to buy below the current market price?",
+options: [
+"Buy Limit",
+"Buy Stop",
+"Sell Limit",
+"Market Sell"
+],
+correct: "Buy Limit"
+},
+
+{
+question: "What happens when a trader places a market order?",
+options: [
+"The broker attempts to execute the trade at the best available current price",
+"The order waits for a specific future price",
+"The trade automatically uses a stop-loss",
+"The trade can only execute after a breakout"
+],
+correct: "The broker attempts to execute the trade at the best available current price"
+},
+
+{
+question: "What does a long upper wick on a candlestick often show?",
+options: [
+"Price moved higher but was pushed back down before the candle closed",
+"Price never moved above the open",
+"Buyers completely controlled the entire candle",
+"Volume was definitely zero"
+],
+correct: "Price moved higher but was pushed back down before the candle closed"
+},
+
+{
+question: "Which sequence most clearly describes an uptrend?",
+options: [
+"Higher highs and higher lows",
+"Lower highs and lower lows",
+"Higher highs and lower lows",
+"Equal highs and lower lows"
+],
+correct: "Higher highs and higher lows"
+},
+
+{
+question: "What is a support level?",
+options: [
+"An area where buying interest may help slow or stop a decline",
+"An area where selling is guaranteed",
+"The highest price reached by a market",
+"A level that automatically creates a trade"
+],
+correct: "An area where buying interest may help slow or stop a decline"
+},
+
+{
+question: "Price briefly breaks above resistance and then closes back below it. What could this indicate?",
+options: [
+"A false breakout",
+"A guaranteed trend reversal",
+"A confirmed continuation",
+"An increase in leverage"
+],
+correct: "A false breakout"
+},
+
+{
+question: "In market structure analysis, what does BOS commonly stand for?",
+options: [
+"Break of Structure",
+"Balance of Sellers",
+"Beginning of Session",
+"Breakout Order Setup"
+],
+correct: "Break of Structure"
+},
+
+{
+question: "What does CHOCH commonly refer to in market structure analysis?",
+options: [
+"Change of Character",
+"Change of Channel",
+"Close of Current High",
+"Continuation of Higher Channels"
+],
+correct: "Change of Character"
+},
+
+{
+question: "Where might buy-side liquidity commonly be found?",
+options: [
+"Above obvious equal highs or previous highs",
+"Below obvious equal lows",
+"Only inside a moving average",
+"Only at the daily open"
+],
+correct: "Above obvious equal highs or previous highs"
+},
+
+{
+question: "Where might sell-side liquidity commonly be found?",
+options: [
+"Below obvious equal lows or previous lows",
+"Above equal highs",
+"Only above resistance",
+"Only inside a supply zone"
+],
+correct: "Below obvious equal lows or previous lows"
+},
+
+{
+question: "What is a liquidity sweep?",
+options: [
+"Price moves through an area containing orders before potentially reversing or continuing",
+"A broker removes all pending orders",
+"A trader closes every open position",
+"A market becomes completely illiquid"
+],
+correct: "Price moves through an area containing orders before potentially reversing or continuing"
+},
+
+{
+question: "A supply zone is generally associated with:",
+options: [
+"An area where selling pressure may become significant",
+"An area where buying is guaranteed",
+"The lowest price on a chart",
+"A fixed spread offered by a broker"
+],
+correct: "An area where selling pressure may become significant"
+},
+
+{
+question: "A demand zone is generally associated with:",
+options: [
+"An area where buying pressure may become significant",
+"An area where selling is guaranteed",
+"The highest price on a chart",
+"A broker's commission"
+],
+correct: "An area where buying pressure may become significant"
+},
+
+{
+question: "Why can using too many indicators become problematic?",
+options: [
+"They can create conflicting signals and make analysis harder to interpret",
+"They guarantee different results on every trade",
+"They automatically increase spreads",
+"They prevent charts from displaying price"
+],
+correct: "They can create conflicting signals and make analysis harder to interpret"
+},
+
+{
+question: "What is one common use of a moving average?",
+options: [
+"To smooth price data and help identify trends",
+"To guarantee future prices",
+"To calculate broker commissions",
+"To eliminate market risk"
+],
+correct: "To smooth price data and help identify trends"
+},
+
+{
+question: "What does RSI primarily measure?",
+options: [
+"Recent price momentum",
+"Broker leverage",
+"Trading account balance",
+"Spread size"
+],
+correct: "Recent price momentum"
+},
+
+{
+question: "What does ATR primarily measure?",
+options: [
+"Market volatility",
+"Market direction with certainty",
+"Account leverage",
+"Currency strength only"
+],
+correct: "Market volatility"
+},
+
+{
+question: "MACD is commonly used to analyze:",
+options: [
+"Momentum and trend-related changes",
+"Broker account verification",
+"Position size only",
+"Trading commissions"
+],
+correct: "Momentum and trend-related changes"
+},
+
+{
+question: "A trader risks $2 and targets $6. What is the risk-to-reward ratio?",
+options: [
+"1:3",
+"3:1",
+"1:2",
+"2:3"
+],
+correct: "1:3"
+},
+
+{
+question: "A trader risks $5 and targets $10. What is the risk-to-reward ratio?",
+options: [
+"1:2",
+"2:1",
+"1:5",
+"5:10"
+],
+correct: "1:2"
+},
+
+{
+question: "If a trader risks 1% of an account on a trade, what does that mean?",
+options: [
+"The planned loss if the stop-loss is hit is approximately 1% of the account",
+"The trader must make exactly 1% profit",
+"The trade uses 1% leverage",
+"The broker charges a 1% spread"
+],
+correct: "The planned loss if the stop-loss is hit is approximately 1% of the account"
+},
+
+{
+question: "What is position sizing primarily concerned with?",
+options: [
+"Determining how large a trade should be based on risk and other factors",
+"Predicting the exact next candle",
+"Choosing the color of a chart",
+"Removing market volatility"
+],
+correct: "Determining how large a trade should be based on risk and other factors"
+},
+
+{
+question: "What does leverage allow a trader to do?",
+options: [
+"Control a larger position with a smaller amount of capital",
+"Guarantee higher profits",
+"Eliminate trading risk",
+"Prevent losing trades"
+],
+correct: "Control a larger position with a smaller amount of capital"
+},
+
+{
+question: "What is a trendline generally used for?",
+options: [
+"Helping visualize the direction of price movement",
+"Guaranteeing support",
+"Calculating account balance",
+"Determining broker spreads"
+],
+correct: "Helping visualize the direction of price movement"
+},
+
+{
+question: "What is resistance?",
+options: [
+"An area where selling pressure may slow or stop an upward move",
+"An area where price must always fall",
+"The lowest price in a market",
+"A guaranteed reversal point"
+],
+correct: "An area where selling pressure may slow or stop an upward move"
+},
+
+{
+question: "Which sequence most clearly describes a downtrend?",
+options: [
+"Lower highs and lower lows",
+"Higher highs and higher lows",
+"Higher highs and lower lows",
+"Equal highs and higher lows"
+],
+correct: "Lower highs and lower lows"
+},
+
+{
+question: "Price breaks above resistance but quickly falls back below it. What is this commonly called?",
+options: [
+"A false breakout",
+"A confirmed continuation",
+"A higher low",
+"A demand expansion"
+],
+correct: "A false breakout"
+},
+
+{
+question: "What are swing highs and swing lows used for?",
+options: [
+"Identifying important turning points and market structure",
+"Calculating broker commissions",
+"Setting account passwords",
+"Removing spread costs"
+],
+correct: "Identifying important turning points and market structure"
+},
+
+{
+question: "What does price action analysis focus primarily on?",
+options: [
+"Price movement and its patterns on the chart",
+"Broker advertisements",
+"Account funding methods",
+"Leverage limits only"
+],
+correct: "Price movement and its patterns on the chart"
+},
+
+{
+question: "What is a major difference between fundamental and technical analysis?",
+options: [
+"Fundamental analysis studies economic factors, while technical analysis studies price and market data",
+"Fundamental analysis only uses candlesticks",
+"Technical analysis only studies economic news",
+"They are exactly the same approach"
+],
+correct: "Fundamental analysis studies economic factors, while technical analysis studies price and market data"
+},
+
+{
+question: "Why are support and resistance often better viewed as zones rather than exact prices?",
+options: [
+"Price may react across an area rather than at one precise level",
+"Markets always move in straight lines",
+"Indicators require zones",
+"Spreads only exist inside zones"
+],
+correct: "Price may react across an area rather than at one precise level"
+},
+
+{
+question: "What is a breakout?",
+options: [
+"Price moves beyond an important support, resistance, or structure area",
+"Price stays exactly at the same level",
+"A broker increases leverage",
+"A trader closes a position"
+],
+correct: "Price moves beyond an important support, resistance, or structure area"
+},
+
+{
+question: "If price breaks above resistance and continues moving higher, this may be described as:",
+options: [
+"Breakout continuation",
+"Guaranteed reversal",
+"Sell-side liquidity",
+"Range compression"
+],
+correct: "Breakout continuation"
+},
+
+{
+question: "Which price structure is consistent with an uptrend?",
+options: [
+"Higher low",
+"Lower low",
+"Lower high",
+"Equal low followed by lower low"
+],
+correct: "Higher low"
+},
+
+{
+question: "Which price structure is consistent with a downtrend?",
+options: [
+"Lower high",
+"Higher high",
+"Higher low",
+"Equal high followed by higher high"
+],
+correct: "Lower high"
+},
+
+{
+question: "What does the body of a candlestick represent?",
+options: [
+"The distance between the opening and closing prices",
+"The highest and lowest price only",
+"The spread",
+"The trading volume"
+],
+correct: "The distance between the opening and closing prices"
+},
+
+{
+question: "What can a long wick indicate?",
+options: [
+"Price was rejected from an area during that candle",
+"Price never moved",
+"The market was guaranteed to reverse",
+"The candle had no opening price"
+],
+correct: "Price was rejected from an area during that candle"
+},
+
+{
+question: "Why might a trader use multiple timeframes?",
+options: [
+"To examine market structure and price behavior from different perspectives",
+"To guarantee a winning trade",
+"To eliminate spreads",
+"To increase account balance automatically"
+],
+correct: "To examine market structure and price behavior from different perspectives"
+},
+
+{
+question: "What does confluence mean in technical analysis?",
+options: [
+"Several independent factors support the same trade idea",
+"Using as many indicators as possible",
+"Trading without a plan",
+"Entering immediately after every candle"
+],
+correct: "Several independent factors support the same trade idea"
+},
+
+{
+question: "What is the purpose of a trading plan?",
+options: [
+"To define rules for entries, risk, exits, and trade management",
+"To guarantee profitable trades",
+"To predict every market movement",
+"To remove all uncertainty"
+],
+correct: "To define rules for entries, risk, exits, and trade management"
+},
+
+{
+question: "Why can entering a trade simply because price moved very quickly be risky?",
+options: [
+"The move may already be extended and could reverse or retrace",
+"Fast price movement always means the trend is over",
+"Fast movement eliminates volatility",
+"Price cannot move quickly without news"
+],
+correct: "The move may already be extended and could reverse or retrace"
+},
+
+{
+question: "Why is liquidity important when studying market structure?",
+options: [
+"Areas with concentrated orders can influence how price moves",
+"Liquidity guarantees that every trade wins",
+"Liquidity determines a trader's password",
+"Liquidity removes the spread"
+],
+correct: "Areas with concentrated orders can influence how price moves"
+},
+
+{
+question: "Which statement about technical indicators is most accurate?",
+options: [
+"Indicators are tools for analysis and do not guarantee future price movement",
+"Indicators predict every future candle",
+"Indicators eliminate trading risk",
+"Using more indicators guarantees better analysis"
+],
+correct: "Indicators are tools for analysis and do not guarantee future price movement"
+},
+
+{
+question: "Why is risk-to-reward important when planning a trade?",
+options: [
+"It compares the potential loss with the potential gain",
+"It guarantees the trade will win",
+"It determines the currency pair",
+"It removes the need for a stop-loss"
+],
+correct: "It compares the potential loss with the potential gain"
+},
+
+{
+question: "A trade has a 20-pip stop-loss and a 40-pip target. What is the risk-to-reward ratio?",
+options: [
+"1:2",
+"2:1",
+"1:1",
+"20:40"
+],
+correct: "1:2"
+}
+
+];
+
+
+/* ============================
+   VARIABLES
+============================ */
+
+let questions = [];
+
+let currentQuestion = 0;
+
+let userAnswers = [];
+
+let timeRemaining = TEST_DURATION;
+
+let timerInterval = null;
+
+let participantName = "";
+
+let participantId = "";
+
+let testStarted = false;
+
+let submitted = false;
+
+
+/* ============================
+   SHUFFLE
+============================ */
+
+function shuffle(array) {
+
+  const copy = [...array];
+
+  for (let i = copy.length - 1; i > 0; i--) {
+
+    const j = Math.floor(Math.random() * (i + 1));
+
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+
+  }
+
+  return copy;
+}
+
+
+/* ============================
+   CREATE TEST
+============================ */
+
+function createTest() {
+
+  const selectedQuestions =
+    shuffle(questionBank).slice(0, TOTAL_QUESTIONS);
+
+  questions = selectedQuestions.map(q => {
+
+    return {
+      question: q.question,
+      options: shuffle(q.options),
+      correct: q.correct
+    };
+
+  });
+
+  userAnswers = new Array(TOTAL_QUESTIONS).fill(null);
+
+}
+
+
+/* ============================
+   START TEST
+============================ */
+
+function startTest() {
+
+  const name =
+    document.getElementById("nameInput").value.trim();
+
+  const id =
+    document.getElementById("idInput").value.trim();
+
+  const error =
+    document.getElementById("startError");
+
+  error.textContent = "";
+
+  if (!name) {
+
+    error.textContent = "Please enter your name.";
+
+    return;
+
+  }
+
+  if (!id) {
+
+    error.textContent = "Please enter your Participant ID.";
+
+    return;
+
+  }
+
+  if (id.length < 3) {
+
+    error.textContent =
+      "Participant ID must contain at least 3 characters.";
+
+    return;
+
+  }
+
+  participantName = name;
+
+  participantId = id.toUpperCase();
+
+  createTest();
+
+  currentQuestion = 0;
+
+  timeRemaining = TEST_DURATION;
+
+  testStarted = true;
+
+  submitted = false;
+
+  document.getElementById("startScreen").style.display =
+    "none";
+
+  document.getElementById("testScreen").style.display =
+    "block";
+
+  updateQuestion();
+
+  updateTimer();
+
+  timerInterval = setInterval(updateTimer, 1000);
+
+}
+
+
+/* ============================
+   DISPLAY QUESTION
+============================ */
+
+function updateQuestion() {
+
+  const q = questions[currentQuestion];
+
+  document.getElementById("questionCounter").textContent =
+    `Question ${currentQuestion + 1} of ${TOTAL_QUESTIONS}`;
+
+  document.getElementById("questionNumber").textContent =
+    `Question ${currentQuestion + 1}`;
+
+  document.getElementById("questionText").textContent =
+    q.question;
+
+  const optionsContainer =
+    document.getElementById("optionsContainer");
+
+  optionsContainer.innerHTML = "";
+
+  q.options.forEach((option, index) => {
+
+    const button = document.createElement("button");
+
+    button.className = "option";
+
+    button.textContent =
+      `${String.fromCharCode(65 + index)}. ${option}`;
+
+    if (userAnswers[currentQuestion] === option) {
+
+      button.classList.add("selected");
+
+    }
+
+    button.addEventListener("click", () => {
+
+      userAnswers[currentQuestion] = option;
+
+      updateQuestion();
+
+    });
+
+    optionsContainer.appendChild(button);
+
+  });
+
+
+  document.getElementById("previousBtn").style.visibility =
+    currentQuestion === 0 ? "hidden" : "visible";
+
+
+  document.getElementById("nextBtn").textContent =
+    currentQuestion === TOTAL_QUESTIONS - 1
+      ? "Submit Test"
+      : "Next";
+
+
+  const progress =
+    ((currentQuestion + 1) / TOTAL_QUESTIONS) * 100;
+
+  document.getElementById("progressBar").style.width =
+    progress + "%";
+
+}
+
+
+/* ============================
+   TIMER
+============================ */
+
+function updateTimer() {
+
+  const minutes =
+    Math.floor(timeRemaining / 60);
+
+  const seconds =
+    timeRemaining % 60;
+
+  document.getElementById("timer").textContent =
+    `${minutes}:${seconds.toString().padStart(2, "0")}`;
+
+
+  if (timeRemaining <= 60) {
+
+    document.getElementById("timer")
+      .classList.add("warning");
+
+  }
+
+
+  if (timeRemaining <= 0) {
+
+    clearInterval(timerInterval);
+
+    submitTest("Time expired");
+
+    return;
+
+  }
+
+  timeRemaining--;
+
+}
+
+
+/* ============================
+   NEXT QUESTION
+============================ */
+
+function nextQuestion() {
+
+  if (currentQuestion < TOTAL_QUESTIONS - 1) {
+
+    currentQuestion++;
+
+    updateQuestion();
+
+  } else {
+
+    submitTest("Submitted");
+
+  }
+
+}
+
+
+/* ============================
+   PREVIOUS QUESTION
+============================ */
+
+function previousQuestion() {
+
+  if (currentQuestion > 0) {
+
+    currentQuestion--;
+
+    updateQuestion();
+
+  }
+
+}
+
+
+/* ============================
+   CALCULATE SCORE
+============================ */
+
+function calculateScore() {
+
+  let score = 0;
+
+  questions.forEach((q, index) => {
+
+    if (userAnswers[index] === q.correct) {
+
+      score++;
+
+    }
+
+  });
+
+  return score;
+
+}
+
+
+/* ============================
+   TIME USED
+============================ */
+
+function getTimeUsed() {
+
+  const used =
+    TEST_DURATION - timeRemaining;
+
+  const minutes =
+    Math.floor(used / 60);
+
+  const seconds =
+    used % 60;
+
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+
+}
+
+
+/* ============================
+   SEND RESULT
+============================ */
+
+function sendResult(score, percent, timeTaken, reason) {
+
+  const data = new URLSearchParams();
+
+  data.append("name", participantName);
+
+  data.append("id", participantId);
+
+  data.append("score", `${score}/${TOTAL_QUESTIONS}`);
+
+  data.append("percent", `${percent}%`);
+
+  data.append("timeTaken", timeTaken);
+
+  data.append("reason", reason);
+
+
+  fetch(SCRIPT_URL, {
+
+    method: "POST",
+
+    mode: "no-cors",
+
+    body: data,
+
+    keepalive: true
+
+  }).catch(error => {
+
+    console.log("Submission error:", error);
+
+  });
+
+}
+
+
+/* ============================
+   SUBMIT TEST
+============================ */
+
+function submitTest(reason) {
+
+  if (submitted) return;
+
+  submitted = true;
+
+  testStarted = false;
+
+  clearInterval(timerInterval);
+
+  const score = calculateScore();
+
+  const percent =
+    Math.round((score / TOTAL_QUESTIONS) * 100);
+
+  const timeTaken = getTimeUsed();
+
+
+  document.getElementById("testScreen").style.display =
+    "none";
+
+  document.getElementById("resultScreen").style.display =
+    "flex";
+
+
+  document.getElementById("scoreDisplay").textContent =
+    `${score}/${TOTAL_QUESTIONS}`;
+
+  document.getElementById("percentDisplay").textContent =
+    `${percent}%`;
+
+  document.getElementById("resultName").textContent =
+    participantName;
+
+  document.getElementById("resultId").textContent =
+    participantId;
+
+  document.getElementById("resultTime").textContent =
+    timeTaken;
+
+
+  sendResult(
+    score,
+    percent,
+    timeTaken,
+    reason
+  );
+
+}
+
+
+/* ============================
+   BUTTON EVENTS
+============================ */
+
+document
+  .getElementById("startBtn")
+  .addEventListener("click", startTest);
+
+
+document
+  .getElementById("nextBtn")
+  .addEventListener("click", nextQuestion);
+
+
+document
+  .getElementById("previousBtn")
+  .addEventListener("click", previousQuestion);
+
+
+/* ============================
+   HANDLE LEAVING PAGE
+============================ */
+
+window.addEventListener("pagehide", function () {
+
+  if (testStarted && !submitted) {
+
+    submitTest("Left test");
+
+  }
+
+});
+
+</script>
+
+</body>
+</html>
